@@ -11,18 +11,20 @@ This repository (`claude-code-web-test2`) is a test environment for Claude Code 
 
 ```
 claude-code-web-test2/
-├── .git/                 # Git repository data
-├── README.md             # Basic repository information
-└── CLAUDE.md            # This file - AI assistant guide
+├── .git/                      # Git repository data
+├── boston_house_prices.csv    # Boston housing dataset for ML experiments
+├── README.md                  # Basic repository information
+└── CLAUDE.md                 # This file - AI assistant guide
 ```
 
 ### Current State
 
-This is a minimal repository currently containing:
+This repository now contains:
 - **README.md**: Basic repository identifier
 - **CLAUDE.md**: Comprehensive guide for AI assistants (this document)
+- **boston_house_prices.csv**: Boston housing dataset for machine learning experiments
 
-The repository is in its initial state and serves as a clean slate for testing various development scenarios.
+The repository serves as a test environment with sample data for ML/data science workflows.
 
 ## Development Workflows
 
@@ -87,6 +89,76 @@ This repository uses a **feature branch workflow** with Claude-specific naming c
   2. Adding fixes from pre-commit hooks
 - Before amending, **always** check authorship: `git log -1 --format='%an %ae'`
 - **Never** commit files with secrets (.env, credentials.json, etc.)
+
+## Data Files and Datasets
+
+### Boston House Prices Dataset
+
+**File**: `boston_house_prices.csv`
+
+This is a classic machine learning dataset used for regression tasks, containing housing data from the Boston area.
+
+#### Dataset Overview
+
+- **Purpose**: Predict median house values based on various features
+- **Type**: Regression dataset
+- **Target Variable**: MEDV (Median value of owner-occupied homes in $1000s)
+
+#### Expected Features
+
+The dataset typically includes the following columns:
+
+| Feature | Description |
+|---------|-------------|
+| **CRIM** | Per capita crime rate by town |
+| **ZN** | Proportion of residential land zoned for lots over 25,000 sq.ft. |
+| **INDUS** | Proportion of non-retail business acres per town |
+| **CHAS** | Charles River dummy variable (1 if tract bounds river; 0 otherwise) |
+| **NOX** | Nitric oxides concentration (parts per 10 million) |
+| **RM** | Average number of rooms per dwelling |
+| **AGE** | Proportion of owner-occupied units built prior to 1940 |
+| **DIS** | Weighted distances to five Boston employment centres |
+| **RAD** | Index of accessibility to radial highways |
+| **TAX** | Full-value property-tax rate per $10,000 |
+| **PTRATIO** | Pupil-teacher ratio by town |
+| **B** | 1000(Bk - 0.63)^2 where Bk is the proportion of Black residents by town |
+| **LSTAT** | Percentage of lower status of the population |
+| **MEDV** | Median value of owner-occupied homes in $1000s (TARGET) |
+
+#### Working with the Dataset
+
+When working with this data, AI assistants should:
+
+1. **Data Exploration**:
+   - Check for missing values
+   - Understand data distributions
+   - Identify correlations between features
+   - Detect potential outliers
+
+2. **Data Processing**:
+   - Handle any missing or invalid data appropriately
+   - Consider feature scaling/normalization for ML models
+   - Check for multicollinearity between features
+
+3. **Common Use Cases**:
+   - Linear regression modeling
+   - Feature importance analysis
+   - Data visualization and EDA (Exploratory Data Analysis)
+   - Testing ML pipelines and workflows
+
+4. **Best Practices**:
+   - Always validate data integrity before processing
+   - Document any transformations applied
+   - Keep raw data unchanged; create processed versions separately
+   - Use appropriate train/test splits for model evaluation
+
+#### Data Privacy and Ethics
+
+**Note**: While this dataset is widely used for educational purposes, be aware that some features (particularly demographic data) may raise ethical considerations in modern ML practice. When working with this data:
+
+- Focus on the technical/educational aspects
+- Be mindful of potentially sensitive attributes
+- Consider discussing ethical implications if using for teaching/demonstration
 
 ## Key Conventions for AI Assistants
 
@@ -302,7 +374,7 @@ This document should be updated when:
 - New coding conventions are adopted
 - Deployment workflows are introduced
 
-**Last structural change**: Initial creation (2025-12-01)
+**Last structural change**: Added Boston House Prices dataset documentation (2025-12-01)
 
 ---
 
