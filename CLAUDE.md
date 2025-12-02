@@ -1,7 +1,7 @@
 # CLAUDE.md
 
 > **AI Assistant Guide for claude-code-web-test2**
-> Last Updated: 2025-12-01
+> Last Updated: 2025-12-02
 
 ## Overview
 
@@ -11,18 +11,22 @@ This repository (`claude-code-web-test2`) is a test environment for Claude Code 
 
 ```
 claude-code-web-test2/
-├── .git/                 # Git repository data
-├── README.md             # Basic repository information
-└── CLAUDE.md            # This file - AI assistant guide
+├── .git/                              # Git repository data
+├── README.md                          # Basic repository information
+├── CLAUDE.md                          # This file - AI assistant guide
+├── boston_house_prices.csv            # Boston housing dataset
+└── boston_housing_analysis.ipynb      # Jupyter notebook for data analysis
 ```
 
 ### Current State
 
-This is a minimal repository currently containing:
+This repository contains:
 - **README.md**: Basic repository identifier
 - **CLAUDE.md**: Comprehensive guide for AI assistants (this document)
+- **boston_house_prices.csv**: Dataset for Boston housing price analysis
+- **boston_housing_analysis.ipynb**: Jupyter notebook with data analysis and visualizations
 
-The repository is in its initial state and serves as a clean slate for testing various development scenarios.
+The repository serves as a test environment for Claude Code functionality, including data analysis workflows.
 
 ## Development Workflows
 
@@ -32,7 +36,7 @@ This repository uses a **feature branch workflow** with Claude-specific naming c
 
 #### Branch Naming Convention
 - **Pattern**: `claude/<session-prefix>-<session-id>`
-- **Current branch**: `claude/claude-md-mimlgu2yaipu47hh-01WZgmjuTA48niG1rujTeTfW`
+- **Current branch**: `upbeat-blackwell`
 - **Critical**: All branch names MUST start with `claude/` and end with the matching session ID for push operations to succeed
 
 #### Working with Branches
@@ -234,9 +238,28 @@ If PR creation is requested:
 
 ## Project-Specific Patterns
 
-### Initial Repository State
+### Data Analysis Workflows
 
-This repository is currently minimal and serves as a test environment. When developing:
+This repository includes data analysis capabilities using Jupyter notebooks:
+
+1. **Jupyter Notebooks**:
+   - Use `.ipynb` files for exploratory data analysis
+   - Include visualizations and narrative explanations
+   - Keep notebooks organized with clear sections
+
+2. **Data Files**:
+   - Store datasets as CSV files in the root directory
+   - Document data sources and structure
+   - Keep datasets version-controlled for reproducibility
+
+3. **Python Dependencies**:
+   - Common libraries: pandas, numpy, matplotlib, seaborn, scikit-learn
+   - Ensure notebooks document required packages
+   - Use virtual environments for dependency isolation
+
+### Development Practices
+
+When developing in this repository:
 
 1. **Establish structure gradually**: Add directories/files as needed
 2. **Document decisions**: Update this CLAUDE.md when adding patterns
@@ -248,7 +271,7 @@ This repository is currently minimal and serves as a test environment. When deve
 As this repository grows, update this document with:
 
 - **New directory structures**: Document purpose of each directory
-- **Build systems**: If adding package.json, Makefile, etc.
+- **Build systems**: If adding package.json, requirements.txt, etc.
 - **Testing frameworks**: Document how to run tests
 - **Coding standards**: Language-specific conventions
 - **Dependencies**: How to install and manage
@@ -302,7 +325,7 @@ This document should be updated when:
 - New coding conventions are adopted
 - Deployment workflows are introduced
 
-**Last structural change**: Initial creation (2025-12-01)
+**Last structural change**: Added data analysis files (2025-12-02)
 
 ---
 
