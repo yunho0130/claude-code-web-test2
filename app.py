@@ -368,8 +368,14 @@ elif page == "Linear Regression":
         """)
 
 elif page == "PandasAI Chat":
-    st.header("🤖 PandasAI Chat")
-    st.markdown("Ask questions about the Boston Housing data in natural language!")
+    st.header("🤖 PandasAI Chat - Dynamic Real-time Analysis")
+    st.markdown("Ask questions about the Boston Housing data and see dynamic visualizations in real-time!")
+
+    # Initialize session state for chat history
+    if 'chat_history' not in st.session_state:
+        st.session_state.chat_history = []
+    if 'analysis_results' not in st.session_state:
+        st.session_state.analysis_results = []
 
     # API Key input
     api_key = st.text_input("Enter your PandasAI API Key:", type="password")
@@ -380,43 +386,189 @@ elif page == "PandasAI Chat":
         try:
             agent = Agent(df)
 
-            # Example questions
-            st.markdown("**Example Questions:**")
-            st.markdown("""
-            - What is the average price of houses?
-            - Which features have the highest correlation with price?
-            - Show me the top 10 most expensive houses
-            - What is the distribution of rooms per dwelling?
-            - How does crime rate affect housing prices?
-            """)
+            # Create two columns for layout
+            col1, col2 = st.columns([1, 1])
 
-            # User question input
-            user_question = st.text_area("Enter your question:", height=100)
+            with col1:
+                st.markdown("### 💬 Chat Interface")
 
-            if st.button("Ask PandasAI"):
-                if user_question:
-                    with st.spinner("Analyzing..."):
+                # Example questions in expander
+                with st.expander("📋 Example Questions", expanded=False):
+                    st.markdown("""
+                    - What is the average price of houses?
+                    - Which features have the highest correlation with price?
+                    - Show me the top 10 most expensive houses
+                    - What is the distribution of rooms per dwelling?
+                    - How does crime rate affect housing prices?
+                    - Plot the relationship between RM and MEDV
+                    - Show me houses with more than 6 rooms
+                    """)
+
+                # User question input
+                user_question = st.text_input("Enter your question:", key="question_input")
+
+                col_btn1, col_btn2 = st.columns([1, 1])
+                with col_btn1:
+                    ask_button = st.button("🚀 Ask PandasAI", type="primary", use_container_width=True)
+                with col_btn2:
+                    if st.button("🗑️ Clear History", use_container_width=True):
+                        st.session_state.chat_history = []
+                        st.session_state.analysis_results = []
+                        st.rerun()
+
+                # Display chat history
+                if st.session_state.chat_history:
+                    st.markdown("---")
+                    st.markdown("### 📜 Conversation History")
+                    for i, (q, a) in enumerate(st.session_state.chat_history):
+                        with st.container():
+                            st.markdown(f"**Q{i+1}:** {q}")
+                            st.markdown(f"**A{i+1}:** {a}")
+                            st.markdown("---")
+
+            with col2:
+                st.markdown("### 📊 Dynamic Analysis Results")
+
+                if ask_button and user_question:
+                    with st.spinner("🔄 Analyzing in real-time..."):
                         try:
                             response = agent.chat(user_question)
 
-                            st.subheader("Answer:")
+                            # Store in chat history
+                            response_text = str(response) if not isinstance(response, (plt.Figure, pd.DataFrame)) else "See visualization below"
+                            st.session_state.chat_history.append((user_question, response_text))
+
+                            # Display current analysis
+                            st.markdown("#### 🎯 Current Analysis")
 
                             # Check if response is a plot
                             if isinstance(response, plt.Figure):
                                 st.pyplot(response)
+                                st.success("✅ Visualization generated!")
                             elif isinstance(response, pd.DataFrame):
-                                st.dataframe(response)
+                                st.dataframe(response, use_container_width=True)
+
+                                # Auto-generate statistics for DataFrame results
+                                if len(response) > 0:
+                                    st.markdown("##### 📈 Quick Statistics")
+                                    stat_cols = response.select_dtypes(include=[np.number]).columns
+                                    if len(stat_cols) > 0:
+                                        stats_col1, stats_col2, stats_col3 = st.columns(3)
+                                        with stats_col1:
+                                            st.metric("Rows", len(response))
+                                        with stats_col2:
+                                            st.metric("Columns", len(response.columns))
+                                        with stats_col3:
+                                            if 'MEDV' in response.columns:
+                                                st.metric("Avg Price", f"${response['MEDV'].mean():.2f}k")
+
+                                        # Auto-generate visualization if numeric columns exist
+                                        if len(stat_cols) > 0 and len(response) > 1:
+                                            st.markdown("##### 📊 Auto-generated Visualization")
+                                            fig, ax = plt.subplots(figsize=(8, 5))
+
+                                            # If MEDV is in columns, create a relevant plot
+                                            if 'MEDV' in response.columns and len(stat_cols) > 1:
+                                                other_col = [c for c in stat_cols if c != 'MEDV'][0]
+                                                ax.scatter(response[other_col], response['MEDV'], alpha=0.6, color='steelblue')
+                                                ax.set_xlabel(other_col)
+                                                ax.set_ylabel('MEDV (Price)')
+                                                ax.set_title(f'{other_col} vs Price')
+                                            else:
+                                                # Create a simple bar chart of first numeric column
+                                                col_to_plot = stat_cols[0]
+                                                if len(response) <= 20:
+                                                    response[col_to_plot].plot(kind='bar', ax=ax, color='steelblue')
+                                                    ax.set_ylabel(col_to_plot)
+                                                else:
+                                                    response[col_to_plot].hist(bins=20, ax=ax, color='steelblue', edgecolor='black')
+                                                    ax.set_xlabel(col_to_plot)
+                                                    ax.set_ylabel('Frequency')
+                                                ax.set_title(f'Distribution of {col_to_plot}')
+
+                                            plt.tight_layout()
+                                            st.pyplot(fig)
+
+                                st.success("✅ Data table generated!")
                             else:
-                                st.write(response)
+                                st.info("💡 " + str(response))
+
+                                # Try to extract numerical insights and visualize
+                                try:
+                                    # Check if the response contains numerical analysis
+                                    response_lower = str(response).lower()
+                                    if any(word in response_lower for word in ['average', 'mean', 'median', 'correlation', 'highest', 'lowest']):
+                                        st.markdown("##### 🎨 Related Visualization")
+
+                                        # Auto-generate a relevant chart based on the query
+                                        question_lower = user_question.lower()
+
+                                        if 'correlation' in question_lower:
+                                            # Show correlation heatmap
+                                            fig, ax = plt.subplots(figsize=(8, 6))
+                                            top_features = df.corr()['MEDV'].abs().sort_values(ascending=False)[1:6].index
+                                            corr_subset = df[list(top_features) + ['MEDV']].corr()
+                                            sns.heatmap(corr_subset, annot=True, cmap='coolwarm', center=0, fmt='.2f', ax=ax)
+                                            ax.set_title('Top Feature Correlations with Price')
+                                            st.pyplot(fig)
+                                        elif 'price' in question_lower or 'medv' in question_lower:
+                                            # Show price distribution
+                                            fig, ax = plt.subplots(figsize=(8, 5))
+                                            ax.hist(df['MEDV'], bins=30, edgecolor='black', alpha=0.7, color='steelblue')
+                                            ax.set_xlabel('Price ($1000)')
+                                            ax.set_ylabel('Frequency')
+                                            ax.set_title('Housing Price Distribution')
+                                            st.pyplot(fig)
+                                        elif any(col.lower() in question_lower for col in df.columns if col != 'MEDV'):
+                                            # Find mentioned column and plot vs price
+                                            for col in df.columns:
+                                                if col.lower() in question_lower and col != 'MEDV':
+                                                    fig, ax = plt.subplots(figsize=(8, 5))
+                                                    ax.scatter(df[col], df['MEDV'], alpha=0.5, color='steelblue')
+                                                    ax.set_xlabel(col)
+                                                    ax.set_ylabel('MEDV (Price)')
+                                                    ax.set_title(f'{col} vs Housing Price')
+
+                                                    # Add trend line
+                                                    z = np.polyfit(df[col], df['MEDV'], 1)
+                                                    p = np.poly1d(z)
+                                                    ax.plot(df[col].sort_values(), p(df[col].sort_values()), "r--", alpha=0.8)
+                                                    st.pyplot(fig)
+                                                    break
+                                except:
+                                    pass
+
+                                st.success("✅ Analysis complete!")
 
                         except Exception as e:
-                            st.error(f"Error: {str(e)}")
+                            st.error(f"❌ Error: {str(e)}")
+                            st.info("Try rephrasing your question or check your API key.")
+                elif not user_question and ask_button:
+                    st.warning("⚠️ Please enter a question first.")
                 else:
-                    st.warning("Please enter a question.")
+                    st.info("👈 Enter a question and click 'Ask PandasAI' to see dynamic real-time analysis!")
+
+                    # Show a sample visualization
+                    st.markdown("#### 🎬 Sample: Dynamic Analysis Preview")
+                    fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+
+                    axes[0].scatter(df['RM'], df['MEDV'], alpha=0.5, color='steelblue')
+                    axes[0].set_xlabel('Average Rooms (RM)')
+                    axes[0].set_ylabel('Price (MEDV)')
+                    axes[0].set_title('Rooms vs Price')
+
+                    axes[1].hist(df['MEDV'], bins=20, edgecolor='black', alpha=0.7, color='coral')
+                    axes[1].set_xlabel('Price ($1000)')
+                    axes[1].set_ylabel('Frequency')
+                    axes[1].set_title('Price Distribution')
+
+                    plt.tight_layout()
+                    st.pyplot(fig)
+
         except Exception as e:
             st.error(f"Error initializing PandasAI: {str(e)}")
     else:
-        st.info("Please enter your PandasAI API key to use PandasAI chat feature. Get your API key at https://pandabi.ai")
+        st.info("🔑 Please enter your PandasAI API key to use PandasAI chat feature. Get your API key at https://pandabi.ai")
 
         st.markdown("---")
         st.subheader("Without API Key - Basic Data Query")
