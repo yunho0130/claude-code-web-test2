@@ -1,0 +1,44 @@
+{
+  "data_sources": {
+    "boston_housing": {
+      "path": "boston_house_prices.csv",
+      "format": "csv",
+      "encoding": "utf-8",
+      "skiprows": 1,
+      "description": "Boston Housing dataset with pricing and features"
+    },
+    "sample_data": {
+      "path": "test_data/sample_data.json",
+      "format": "json",
+      "description": "Sample JSON dataset for testing"
+    },
+    "metrics": {
+      "path": "test_data/sample_metrics.csv",
+      "format": "csv",
+      "encoding": "utf-8",
+      "description": "Server metrics data"
+    },
+    "streaming_events": {
+      "path": "test_data/streaming_data.jsonl",
+      "format": "jsonl",
+      "description": "JSON Lines format for streaming events"
+    }
+  },
+  "processing": {
+    "chunk_size": 10000,
+    "default_encoding": "utf-8",
+    "date_columns": ["timestamp", "recorded_at"],
+    "numeric_columns": ["value", "cpu_usage", "memory_usage"]
+  },
+  "validation": {
+    "required_columns": {
+      "boston_housing": ["CRIM", "ZN", "INDUS", "CHAS", "NOX", "RM", "AGE", "DIS", "RAD", "TAX", "PTRATIO", "B", "LSTAT", "MEDV"],
+      "metrics": ["metric_name", "value", "unit", "source", "recorded_at"]
+    }
+  },
+  "output": {
+    "default_format": "csv",
+    "compression": false,
+    "include_index": false
+  }
+}
