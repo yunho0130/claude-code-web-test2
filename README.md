@@ -1,6 +1,16 @@
-# Boston Housing Price Analysis Web Application
+# Claude Code Web Test Repository
+
+Test environment for Claude Code web functionality with data analysis capabilities.
+
+## Components
+
+### 1. Boston Housing Price Analysis Web Application
 
 PandasAI를 활용한 Boston 집값 데이터 시각화 웹 애플리케이션
+
+### 2. Flexible Data Stream Handler
+
+A comprehensive data handling system supporting multiple formats and streaming operations
 
 ## 실행 방법
 
@@ -64,3 +74,64 @@ streamlit run app.py
 
 - Python 3.9+
 - OpenAI API Key (PandasAI Chat 기능 사용 시)
+
+## Data Stream Handler
+
+이 저장소는 유연한 데이터 스트림 핸들러를 포함합니다:
+
+### 지원 형식
+- CSV, JSON, JSON Lines (JSONL)
+- Parquet (컬럼 저장 형식)
+- Excel (XLSX, XLS)
+
+### 주요 기능
+- **다중 형식 지원**: 자동 형식 감지 및 변환
+- **스트리밍 처리**: 대용량 파일 청크 단위 처리
+- **데이터 검증**: 스키마 기반 검증
+- **설정 기반 로딩**: JSON 설정 파일 지원
+
+### 빠른 시작
+
+```python
+from data_stream_handler import DataStreamHandler
+
+# 핸들러 초기화
+handler = DataStreamHandler()
+
+# 데이터 로드 (자동 형식 감지)
+df = handler.load_data("data.csv")
+
+# 형식 변환
+handler.convert_format("input.json", "output.csv")
+
+# 대용량 파일 스트리밍
+for chunk in handler.load_streaming("large_file.csv", chunk_size=10000):
+    process(chunk)
+```
+
+### 사용 예제
+
+```bash
+python examples/usage_examples.py
+```
+
+자세한 내용은 [DATA_STREAM_GUIDE.md](DATA_STREAM_GUIDE.md) 참조
+
+## 저장소 구조
+
+```
+claude-code-web-test2/
+├── app.py                       # Streamlit 웹 애플리케이션
+├── data_stream_handler.py       # 데이터 스트림 핸들러
+├── boston_house_prices.csv      # Boston 주택 가격 데이터
+├── test_data/                   # 테스트 데이터
+│   ├── sample_data.json
+│   ├── sample_metrics.csv
+│   └── streaming_data.jsonl
+├── config/                      # 설정 파일
+│   └── data_config.json
+├── fixtures/                    # 테스트 픽스처
+│   └── test_fixtures.py
+└── examples/                    # 사용 예제
+    └── usage_examples.py
+```

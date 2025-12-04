@@ -1,0 +1,13 @@
+metric_name,value,unit,source,recorded_at
+cpu_usage,75.3,percent,server_01,2025-01-01 10:00:00
+memory_usage,8192,MB,server_01,2025-01-01 10:00:00
+disk_usage,450,GB,server_01,2025-01-01 10:00:00
+network_throughput,1250,Mbps,server_01,2025-01-01 10:00:00
+cpu_usage,82.1,percent,server_02,2025-01-01 10:00:00
+memory_usage,16384,MB,server_02,2025-01-01 10:00:00
+disk_usage,890,GB,server_02,2025-01-01 10:00:00
+network_throughput,2100,Mbps,server_02,2025-01-01 10:00:00
+cpu_usage,68.5,percent,server_03,2025-01-01 10:00:00
+memory_usage,4096,MB,server_03,2025-01-01 10:00:00
+disk_usage,320,GB,server_03,2025-01-01 10:00:00
+network_throughput,980,Mbps,server_03,2025-01-01 10:00:00

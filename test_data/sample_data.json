@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "Sample Dataset A",
+    "value": 123.45,
+    "category": "test",
+    "timestamp": "2025-01-01T00:00:00Z",
+    "active": true
+  },
+  {
+    "id": 2,
+    "name": "Sample Dataset B",
+    "value": 678.90,
+    "category": "validation",
+    "timestamp": "2025-01-02T00:00:00Z",
+    "active": true
+  },
+  {
+    "id": 3,
+    "name": "Sample Dataset C",
+    "value": 234.56,
+    "category": "test",
+    "timestamp": "2025-01-03T00:00:00Z",
+    "active": false
+  },
+  {
+    "id": 4,
+    "name": "Sample Dataset D",
+    "value": 890.12,
+    "category": "production",
+    "timestamp": "2025-01-04T00:00:00Z",
+    "active": true
+  },
+  {
+    "id": 5,
+    "name": "Sample Dataset E",
+    "value": 456.78,
+    "category": "test",
+    "timestamp": "2025-01-05T00:00:00Z",
+    "active": false
+  }
+]
