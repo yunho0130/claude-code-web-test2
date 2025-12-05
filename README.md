@@ -2,6 +2,12 @@
 
 Test environment for Claude Code web functionality with data analysis capabilities.
 
+## 🚀 Quick Start with Google Colab
+
+Pandas AI를 사용한 Boston 주택 가격 분석을 Google Colab에서 바로 실행해보세요!
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/yunho0130/claude-code-web-test2/blob/main/pandasai_analysis.ipynb)
+
 ## Components
 
 ### 1. Boston Housing Price Analysis Web Application
